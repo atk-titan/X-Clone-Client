@@ -3,25 +3,41 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "concurrently \"npm run codegen\" \"next dev --turbopack\"",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "codegen": "graphql-codegen --config codegen.ts --watch"
   },
   "dependencies": {
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "next": "15.4.0"
+    "@lobehub/icons": "^2.11.0",
+    "@parcel/watcher": "^2.5.1",
+    "@react-oauth/google": "^0.12.2",
+    "graceful-fs": "^4.2.11",
+    "graphql": "^16.11.0",
+    "graphql-request": "^7.2.0",
+    "next": "15.3.5",
+    "path-case": "^3.0.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-hot-toast": "^2.5.2",
+    "react-icons": "^5.5.0"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@eslint/eslintrc": "^3",
+    "@graphql-codegen/cli": "5.0.7",
+    "@graphql-codegen/client-preset": "4.8.3",
+    "@graphql-codegen/introspection": "4.0.3",
+    "@tailwindcss/postcss": "^4",
+    "@types/graceful-fs": "^4.1.9",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
+    "concurrently": "^9.2.0",
     "eslint": "^9",
-    "eslint-config-next": "15.4.0",
-    "@eslint/eslintrc": "^3"
+    "eslint-config-next": "15.3.5",
+    "tailwindcss": "^4",
+    "tsc-node": "^0.0.3",
+    "typescript": "^5.8.3"
   }
 }
