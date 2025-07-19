@@ -19,7 +19,7 @@ export default function Home() {
         <FeedCard/>
       </div>
       <div className="md:col-span-3">
-        <SignIn/>
+          <SignIn/>
       </div>
     </div>
   );

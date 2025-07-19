@@ -4,6 +4,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import ToasterProvider from "@/components/ToasterProvider";
+import { Providers } from "./providers";
 
 const inter = Inter({subsets:["latin"]});
 
@@ -29,14 +30,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <GoogleOAuthProvider clientId={process.env.clientId || ""}>
-        <body
-          className={`${inter.className} antialiased`}
-        >
-          {children}
-          <ToasterProvider/>
-        </body>
-      </GoogleOAuthProvider>
+        <GoogleOAuthProvider clientId={process.env.clientId || ""}>
+            <body
+              className={`${inter.className} antialiased`}
+              >
+              <Providers>
+                {children}
+              </Providers>
+              <ToasterProvider/>
+            </body>
+        </GoogleOAuthProvider>
     </html>
   );
 }
