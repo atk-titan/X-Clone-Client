@@ -5,10 +5,10 @@ import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import toast from 'react-hot-toast';
 import { graphqlClient } from '@/clients/api';
 import { verifyUserGoogleTokenQuery } from '@/graphql/query/user';
-import { useQueryClient } from '@tanstack/react-query';
+import { getQueryClient } from '@/clients/queryClient';
 
 const GoogleAuthButton = () => {
-    const queryClient = useQueryClient();
+    const queryClient = getQueryClient();
 
     const handleLoginWithGoogle = useCallback( async (cred: CredentialResponse)=>{
         const googleToken = cred.credential;

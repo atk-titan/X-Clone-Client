@@ -6,6 +6,7 @@ import { GoHomeFill } from "react-icons/go";
 import { GiElectric } from "react-icons/gi";
 import { CgMoreO } from "react-icons/cg";
 import { BiUser } from "react-icons/bi";
+import UserAvatar from "../UserAvatar";
 
 interface TwitterSideBar{
     title:string;
@@ -51,7 +52,7 @@ const sideMenuItems: TwitterSideBar[] = [
 
 const Sidebar = () => {
   return (
-    <div>
+    <div className="h-full w-full relative">
         <div className="pl-5 pr-4 py-1 ml-20">
             <div className="hover:bg-gray-700 w-fit p-2 mb-6 ml-2 rounded-full cursor-pointer transition-all">
                 <BsTwitterX className="text-3xl"/>
@@ -62,8 +63,11 @@ const Sidebar = () => {
                 <span>{item.title}</span>
             </div>)}
             <div className="pl-5 pr-10 mt-4">
-                <button className="py-3 text-xl text-black font-semibold bg-gray-50 rounded-full hover:bg-gray-300 transition-all w-full h-full">Post</button>
+                <button className="py-3 text-xl text-black font-semibold bg-gray-50 rounded-full hover:cursor-pointer hover:bg-gray-300 transition-all w-full h-full">Post</button>
             </div>
+        </div>
+        <div>
+            <UserAvatar/>
         </div>
     </div>
   );

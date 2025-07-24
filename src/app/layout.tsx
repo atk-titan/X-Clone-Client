@@ -3,8 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import ToasterProvider from "@/components/ToasterProvider";
-import { Providers } from "./providers";
+import ToasterProvider from "../Providers/ToasterProvider";
+import { Providers } from "../Providers/ClientProvider";
 
 const inter = Inter({subsets:["latin"]});
 
@@ -30,16 +30,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-        <GoogleOAuthProvider clientId={process.env.clientId || ""}>
             <body
               className={`${inter.className} antialiased`}
               >
-              <Providers>
-                {children}
-              </Providers>
-              <ToasterProvider/>
+              <GoogleOAuthProvider clientId={process.env.clientId || ""}>
+                <Providers>
+                  {children}
+                  <ToasterProvider/>
+                </Providers>
+              </GoogleOAuthProvider>
             </body>
-        </GoogleOAuthProvider>
     </html>
   );
 }
