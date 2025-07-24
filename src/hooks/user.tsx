@@ -12,6 +12,6 @@ export const useCurrentUser = () => {
             return graphqlClient.request(getCurrentUserQuery);
         }
     });
-    console.log(query.data);
+    // console.log(query.data);
     return { ...query , user : query.data?.getCurrentUser };
 }
