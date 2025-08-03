@@ -8,11 +8,12 @@ import { MdOutlineGifBox } from "react-icons/md";
 import { GrSchedulePlay } from "react-icons/gr";
 import { IoLocationOutline } from "react-icons/io5";
 import { useCallback, useRef, useState } from "react";
+import { useCreateTweet } from "@/hooks/tweet";
 
 const InputCard = () => {
-
+    const { mutation } = useCreateTweet();
     const { isFetched, user } = useCurrentUser();
-    const [ tweet, setTweet ] = useState("");
+    const [ tweetContent, setTweetContent ] = useState("");
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
     const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -21,8 +22,15 @@ const InputCard = () => {
         textarea.style.height = "auto"; 
         textarea.style.height = `${textarea.scrollHeight}px`; 
         }
-        setTweet(e.target.value);
+        setTweetContent(e.target.value);
     };
+
+    const postHandler = useCallback(() => {
+        mutation.mutate({
+          content: tweetContent
+        });
+        setTweetContent("");
+    },[tweetContent]);
 
     const handleSelectMedia = useCallback(() => {
         const input = document.createElement("input");
@@ -41,7 +49,7 @@ const InputCard = () => {
             </div>
             <div className="col-span-11 pl-2">
               <textarea ref={textareaRef} 
-                        value={tweet} 
+                        value={tweetContent} 
                         rows={3} 
                         className="w-full text-xl py-2 px-1 border-b border-gray-700 focus:outline-0 overflow-hidden resize-none" 
                         placeholder="What's happening?" 
@@ -59,7 +67,11 @@ const InputCard = () => {
                     <IoLocationOutline />
                 </div>
                 <div>
-                    <button className="py-1.5 px-4 text-sm text-black font-semibold bg-gray-50 rounded-full hover:cursor-pointer hover:bg-gray-300 transition-all w-full h-full">Post</button>
+                    <button className="py-1.5 px-4 text-sm text-black font-semibold bg-gray-50 rounded-full hover:cursor-pointer hover:bg-gray-300 transition-all w-full h-full"
+                      onClick={postHandler}
+                    >
+                      Post
+                    </button>
                 </div>
               </div>
             </div>

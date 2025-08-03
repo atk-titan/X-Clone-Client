@@ -1,3 +1,4 @@
+import Feed from "@/components/Feed";
 import FeedCard from "../components/FeedCard";
 import Sidebar from "../components/Sidebar";
 import SignIn from '../components/SignIn/index';
@@ -12,14 +13,7 @@ export default function Home() {
       </div>
       <div className="md:col-span-5 col-span-4 border-r-[1px] border-l-[1px] border-gray-700 h-screen overflow-y-scroll transition-all">
         <InputCard/>
-        <FeedCard/>
-        <FeedCard/>
-        <FeedCard/>
-        <FeedCard/>
-        <FeedCard/>
-        <FeedCard/>
-        <FeedCard/>
-        <FeedCard/>
+        <Feed/>
       </div>
       <div className="md:col-span-3">
             <SignIn/>
