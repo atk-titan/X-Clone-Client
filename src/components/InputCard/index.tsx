@@ -50,14 +50,14 @@ const InputCard = () => {
             <div className="col-span-11 pl-2">
               <textarea ref={textareaRef} 
                         value={tweetContent} 
-                        rows={3} 
+                        rows={2} 
                         className="w-full text-xl py-2 px-1 border-b border-gray-700 focus:outline-0 overflow-hidden resize-none" 
                         placeholder="What's happening?" 
                         onChange={handleInput}>
 
               </textarea>
               <div className="pt-3 flex justify-between items-center">
-                <div className="flex gap-4 text-xl text-blue-400 items-center">
+                <div className="flex gap-2 sm:gap-3 md:gap-4 text-xl text-blue-400 items-center">
                     <BiImage onClick={handleSelectMedia}/>
                     <MdOutlineGifBox />
                     <Grok size={20}/>

@@ -5,6 +5,8 @@ import { Inter } from "next/font/google";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import ToasterProvider from "../Providers/ToasterProvider";
 import { Providers } from "../Providers/ClientProvider";
+import Sidebar from "@/components/Sidebar";
+import SignIn from "@/components/SignIn";
 
 const inter = Inter({subsets:["latin"]});
 
@@ -35,7 +37,17 @@ export default function RootLayout({
               >
               <GoogleOAuthProvider clientId={process.env.clientId || ""}>
                 <Providers>
-                  {children}
+                  <div className="grid grid-cols-12 w-full h-screen px-3 sm:px-6 md:px-10 2xl:px-28">
+                    <div className="sm:col-span-3 col-span-2 flex flex-col">
+                      <Sidebar/>
+                    </div>
+                    <div className="sm:col-span-5 col-span-10 sm:border-r-[1px] border-l-[1px] border-gray-700 h-screen overflow-y-scroll transition-all">
+                      {children}
+                    </div>
+                    <div className="col-span-0 sm:col-span-3">
+                      <SignIn/>
+                    </div>
+                  </div>
                   <ToasterProvider/>
                 </Providers>
               </GoogleOAuthProvider>

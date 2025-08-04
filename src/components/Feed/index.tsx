@@ -11,8 +11,8 @@ function getHoursSinceUpdate(updatedAt: string): string {
   const diffInMins = Math.floor(diffInMs / (1000 * 60));
 
   if(diffInHours > 0)
-    return `${diffInHours} hours`;
-  return `${diffInMins} mins`;
+    return `${diffInHours}h`;
+  return `${diffInMins}m`;
 }
 
 const Feed = () =>{

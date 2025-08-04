@@ -23,13 +23,18 @@ const FeedCard:React.FC<FeedCardProps> = ({ tweet , time }) => {
           </div>
         </div>
         <div className="col-span-11 pl-2">
-          <div className='flex items-center gap-1.5'>
-            <h5 className='font-bold pr-2 text-gray-50'>{ tweet?.author?.firstname + " " + tweet?.author?.lastname }</h5>
-            <h6 className='font-light text-gray-600'>{ tweet?.author?.email }</h6>
-            <div className="h-1 w-1 bg-gray-600 rounded-full"></div>
-            { tweet?.updatedAt && <div className="text-gray-600">{time}</div>}
+          <div className="flex flex-col items-start sm:flex-row sm:items-center justify-between sm:gap-1 gap-0">
+            <h5 className="font-bold pr-2 text-gray-50">
+              {tweet?.author?.firstname + " " + tweet?.author?.lastname}
+            </h5>
+            <div className="flex items-center gap-2 text-gray-600">
+              { !!tweet?.author?.email && <h6 className="font-light">{tweet.author.email.length > 6 ? tweet.author.email.substring(0,11)+"..." : tweet.author.email}</h6>}
+              <div className="h-1 w-1 bg-gray-600 rounded-full" />
+              {tweet?.updatedAt && <div>{time}</div>}
+            </div>
           </div>
-          <div className='mt-1'>
+
+          <div className='mt-2'>
             <p className='whitespace-pre-wrap break-words'>
               {tweet?.content}
             </p>
