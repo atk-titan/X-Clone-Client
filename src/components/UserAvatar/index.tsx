@@ -2,10 +2,11 @@
 import { useCurrentUser } from '@/hooks/user';
 import React from 'react';
 import Image from 'next/image';
+import { User } from '@/gql/graphql';
 
-const UserAvatar = () => {
+const UserAvatar = ({isFetched,user}:{isFetched:boolean,user:User}) => {
 
-    const { isFetched, user } = useCurrentUser();
+    // const { isFetched, user } = useCurrentUser();
 
   return (
     isFetched ? (<div className='absolute bottom-4 right-3 p-2 sm:py-3 sm:px-4 hover:bg-gray-800 border border-gray-600 rounded-full hover:cursor-pointer'>

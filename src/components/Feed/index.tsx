@@ -3,7 +3,7 @@ import { useTweet } from "@/hooks/tweet";
 import FeedCard from "../FeedCard";
 import { Tweet } from "@/gql/graphql";
 
-function getHoursSinceUpdate(updatedAt: string): string {
+export function getHoursSinceUpdate(updatedAt: string): string {
   const updatedDate = new Date(Number(updatedAt)); 
   const now = new Date();
   const diffInMs = now.getTime() - updatedDate.getTime(); 

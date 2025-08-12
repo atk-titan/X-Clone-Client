@@ -37,7 +37,7 @@ export default function RootLayout({
               >
               <GoogleOAuthProvider clientId={process.env.clientId || ""}>
                 <Providers>
-                  <div className="grid grid-cols-12 w-full h-screen px-3 sm:px-6 md:px-10 2xl:px-28">
+                  <div className="grid grid-cols-12 w-full h-screen px-3 sm:px-6 md:px-10 2xl:px-28 bg-gray-950">
                     <div className="sm:col-span-3 col-span-2 flex flex-col">
                       <Sidebar/>
                     </div>

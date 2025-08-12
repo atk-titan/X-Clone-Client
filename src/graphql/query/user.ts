@@ -1,4 +1,5 @@
 import { graphql } from '../../gql';
+import { Tweet } from '@/gql/graphql';
 
 export const verifyUserGoogleTokenQuery = graphql(`#graphql
     query verifyUserGoogleToken($token:String!){
@@ -13,7 +14,14 @@ export const getCurrentUserQuery = graphql(`#graphql
             email,
             profileImageURL,
             firstname,
-            lastname
+            lastname,
+            tweets{
+                id
+                content
+                imageURL
+                videoURL
+                updatedAt
+            }
         }
     }
 `)
