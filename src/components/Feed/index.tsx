@@ -1,27 +1,20 @@
-"use client"
 import { useTweet } from "@/hooks/tweet";
 import FeedCard from "../FeedCard";
 import { Tweet } from "@/gql/graphql";
+import { graphqlClient } from "@/clients/api";
+import { getAllTweetsQuery } from "@/graphql/query/tweet";
 
-export function getHoursSinceUpdate(updatedAt: string): string {
-  const updatedDate = new Date(Number(updatedAt)); 
-  const now = new Date();
-  const diffInMs = now.getTime() - updatedDate.getTime(); 
-  const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
-  const diffInMins = Math.floor(diffInMs / (1000 * 60));
 
-  if(diffInHours > 0)
-    return `${diffInHours}h`;
-  return `${diffInMins}m`;
-}
+const Feed = async () =>{
 
-const Feed = () =>{
+    // const { tweets } = useTweet();
+    const allTweets = await graphqlClient.request(getAllTweetsQuery);
 
-    const { tweets } = useTweet();
+    const tweets = allTweets.getAllTweets as Tweet[];
 
     return (<>
         { tweets && tweets.map((tweet) => {
-            return ( tweet?.updatedAt ? <FeedCard key={ tweet?.id } tweet={ tweet as Tweet } time={getHoursSinceUpdate( tweet?.updatedAt )}/> : null );
+            return ( tweet?.updatedAt ? <FeedCard key={ tweet?.id } tweet={ tweet as Tweet } /> : null );
         })}
     </>);
 }

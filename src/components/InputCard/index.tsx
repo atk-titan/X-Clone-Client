@@ -9,8 +9,14 @@ import { GrSchedulePlay } from "react-icons/gr";
 import { IoLocationOutline } from "react-icons/io5";
 import { useCallback, useRef, useState } from "react";
 import { useCreateTweet } from "@/hooks/tweet";
+import { graphqlClient } from "@/clients/api";
+import { GetSignedUrlForTweetsDocument } from "@/gql/graphql";
+import { getSignedUrlForTweetsQuery } from "@/graphql/query/tweet";
+import axios from 'axios';
+import toast from "react-hot-toast";
 
 const InputCard = () => {
+    const [ imageURL, setImageURL ] = useState("");
     const { mutation } = useCreateTweet();
     const { isFetched, user } = useCurrentUser();
     const [ tweetContent, setTweetContent ] = useState("");
@@ -27,17 +33,52 @@ const InputCard = () => {
 
     const postHandler = useCallback(() => {
         mutation.mutate({
-          content: tweetContent
+          content: tweetContent,
+          imageURL: [imageURL]
         });
         setTweetContent("");
-    },[tweetContent]);
+        setImageURL("")
+    },[tweetContent , imageURL]);
+
+    const handleInputChange = useCallback((input:HTMLInputElement) => {
+      return async ( event: Event ) => {
+        event.preventDefault();
+        console.log(input.files);
+
+        const file: File | null | undefined = input.files?.item(0);
+        if(!file) return
+
+        const { getSignedUrlForTweet } = await graphqlClient.request(getSignedUrlForTweetsQuery,{
+          imageType: file.type.split("/")[1]
+        });
+
+        if(getSignedUrlForTweet){
+          toast.loading("loading...", { id: "media-upload" });
+          await axios.put(getSignedUrlForTweet,file,{
+            headers:{
+              "Content-Type": file.type
+            }
+          });
+          toast.success("upload completed", { id: "media-upload" });
+
+          const url = new URL(getSignedUrlForTweet);
+          const myFilePath = `${url.origin}${url.pathname}`;
+
+          setImageURL(myFilePath);
+        }
+      }
+    },[]);
 
     const handleSelectMedia = useCallback(() => {
         const input = document.createElement("input");
         input.setAttribute("type","file");
         input.setAttribute("accept","image/*,video/*");
+
+        const handlerFn = handleInputChange(input);
+        input.addEventListener("change", handlerFn);
+
         input.click();
-    },[]);
+    },[handleInputChange]);
     
     return (
         <div>
@@ -56,6 +97,9 @@ const InputCard = () => {
                         onChange={handleInput}>
 
               </textarea>
+              {
+                imageURL && <Image src={imageURL} alt="tweet-image" height={300} width={300}/>
+              }
               <div className="pt-3 flex justify-between items-center">
                 <div className="flex gap-2 sm:gap-3 md:gap-4 text-xl text-blue-400 items-center">
                     <BiImage onClick={handleSelectMedia}/>

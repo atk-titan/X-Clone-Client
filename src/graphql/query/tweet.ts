@@ -9,6 +9,7 @@ export const getAllTweetsQuery = graphql(`#graphql
             videoURL
             updatedAt
             author{
+                id
                 firstname
                 lastname
                 email
@@ -17,3 +18,9 @@ export const getAllTweetsQuery = graphql(`#graphql
         }
     }
 `)
+
+export const getSignedUrlForTweetsQuery = graphql(`#graphql
+    query GetSignedUrlForTweets($imageType: String!){
+        getSignedUrlForTweet(imageType:$imageType)
+    }
+`);
