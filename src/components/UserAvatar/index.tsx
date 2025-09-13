@@ -1,10 +1,16 @@
-"use client"
-import { useCurrentUser } from '@/hooks/user';
 import React from 'react';
 import Image from 'next/image';
-import { User } from '@/gql/graphql';
 
-const UserAvatar = ({isFetched,user}:{isFetched:boolean,user:User}) => {
+type PartialUser = {
+  id: string;
+  email?: string;
+  firstname?: string;
+  lastname?: string | null;
+  profileImageURL?: string;
+  follower?: ({ id: string } | null)[] | null;
+};
+
+const UserAvatar = ({isFetched,user}: { isFetched: boolean, user: PartialUser}) => {
 
     // const { isFetched, user } = useCurrentUser();
 

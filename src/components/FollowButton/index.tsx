@@ -1,24 +1,43 @@
 "use client"
+import { revalidateUserProfile } from "@/actions/revalidateUser";
+import { graphqlClient } from "@/clients/api";
+import { getQueryClient } from "@/clients/queryClient";
 import { User } from "@/gql/graphql";
+import { followUserMutation, unfollowUserMutation } from "@/graphql/mutation/user";
 import { useCurrentUser } from "@/hooks/user";
-import { useMemo } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useCallback, useMemo } from "react";
 
-const FollowButton = ({ id, followers }: { id: string, followers: User[] }) => {
+const FollowButton = ({ id }: { id: string }) => {
     const { isFetched, user } = useCurrentUser();
+    const queryClient = getQueryClient();
 
     const checkFollower = useMemo(()=>{
-        if(!followers) return false;
+        if(!user?.following) return false;
 
-        return ( followers.findIndex(el => el.id === user?.id ) ?? -1 ) >= 0
-    },[ user?.id, followers ])
+        return user.following.some(el => el?.id === id )
+    },[ user?.following, id ]);
+
+
+    const handleFollow = useCallback(async ()=>{
+        await graphqlClient.request(followUserMutation,{ to: id });
+        await queryClient.invalidateQueries({queryKey:['current-user']});
+        await revalidateUserProfile(id);
+    },[ id, queryClient ]);
+
+    const handleUnfollow = useCallback(async ()=>{
+        await graphqlClient.request(unfollowUserMutation, { to: id });
+        await queryClient.invalidateQueries({queryKey:['current-user']});
+        await revalidateUserProfile(id);
+    },[ id, queryClient ]);
     
   return (
     isFetched && id !== user?.id && (
         <>
-            { checkFollower ? (<button className="px-3 py-2 border-t-3 border-l-3 border-white text-sm font-medium rounded-full bg-gray-300 text-gray-800 hover:cursor-pointer hover:shadow-sm shadow-gray-50 transition-all duration-400">
-                Follow
-            </button>) : (<button className="px-3 py-2 border-t-3 border-l-3 border-white text-sm font-medium rounded-full bg-gray-300 text-gray-800 hover:cursor-pointer hover:shadow-sm shadow-gray-50 transition-all duration-400">
+            { checkFollower ? (<button onClick={ handleUnfollow } className="px-3 py-2 border-t-3 border-l-3 border-white text-sm font-medium rounded-full bg-gray-300 text-gray-800 hover:cursor-pointer hover:shadow-xs shadow-gray-50 transition-all duration-400">
                 Unfollow
+            </button>) : (<button onClick={ handleFollow } className="px-3 py-2 border-t-3 border-l-3 border-white text-sm font-medium rounded-full bg-gray-300 text-gray-800 hover:cursor-pointer hover:shadow-xs shadow-gray-50 transition-all duration-400">
+                Follow
             </button>) }
         </>)
   );

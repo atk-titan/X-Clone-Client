@@ -7,7 +7,6 @@ import FeedCard from '@/components/FeedCard';
 import { Tweet, User } from '@/gql/graphql';
 import { graphqlClient } from '@/clients/api';
 import { getUserByIdQuery } from '@/graphql/query/user';
-import { useCurrentUser } from '@/hooks/user';
 import FollowButton from '@/components/FollowButton';
 
 const UserProfile = async  ({params}:{ params:{ id: string }}) => {
@@ -56,8 +55,7 @@ const UserProfile = async  ({params}:{ params:{ id: string }}) => {
             <SupportingText text={`${user.following?.length} following`} />
           </div>
           {id && <FollowButton
-                    id={id} 
-                    followers={user.follower?.filter((f): f is User => Boolean(f)) || []}
+                    id={id}
           />}
         </div>
       </div>
