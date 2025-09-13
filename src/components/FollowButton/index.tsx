@@ -1,5 +1,4 @@
 "use client"
-import { revalidateUserProfile } from "@/actions/revalidateUser";
 import { graphqlClient } from "@/clients/api";
 import { getQueryClient } from "@/clients/queryClient";
 import { User } from "@/gql/graphql";
@@ -22,13 +21,11 @@ const FollowButton = ({ id }: { id: string }) => {
     const handleFollow = useCallback(async ()=>{
         await graphqlClient.request(followUserMutation,{ to: id });
         await queryClient.invalidateQueries({queryKey:['current-user']});
-        await revalidateUserProfile(id);
     },[ id, queryClient ]);
 
     const handleUnfollow = useCallback(async ()=>{
         await graphqlClient.request(unfollowUserMutation, { to: id });
         await queryClient.invalidateQueries({queryKey:['current-user']});
-        await revalidateUserProfile(id);
     },[ id, queryClient ]);
     
   return (
