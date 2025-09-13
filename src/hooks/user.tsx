@@ -7,8 +7,8 @@ import { getCurrentUserQuery } from '@/graphql/query/user';
 export const useCurrentUser = () => {
     const query = useQuery({
         queryKey : ['current-user'],
-        queryFn : () => {
-            return graphqlClient.request(getCurrentUserQuery);
+        queryFn : async () => {
+            return await graphqlClient.request(getCurrentUserQuery);
         }
     });
     // console.log(query.data);

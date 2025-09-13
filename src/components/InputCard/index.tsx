@@ -20,14 +20,8 @@ const InputCard = () => {
     const { mutation } = useCreateTweet();
     const { isFetched, user } = useCurrentUser();
     const [ tweetContent, setTweetContent ] = useState("");
-    const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
     const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        const textarea = textareaRef.current;
-        if (textarea) {
-        textarea.style.height = "auto"; 
-        textarea.style.height = `${textarea.scrollHeight}px`; 
-        }
         setTweetContent(e.target.value);
     };
 
@@ -89,10 +83,8 @@ const InputCard = () => {
               </div>
             </div>
             <div className="col-span-11 pl-2">
-              <textarea ref={textareaRef} 
-                        value={tweetContent} 
-                        rows={2} 
-                        className="w-full text-xl py-2 px-1 border-b border-gray-700 focus:outline-0 overflow-hidden resize-none" 
+              <textarea value={tweetContent} 
+                        className="w-full min-h-[100px] h-auto text-xl py-2 px-1 border-b border-gray-700 focus:outline-0 overflow-hidden resize-none field-sizing-content" 
                         placeholder="What's happening?" 
                         onChange={handleInput}>
 
