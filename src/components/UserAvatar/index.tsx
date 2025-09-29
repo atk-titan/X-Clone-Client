@@ -7,7 +7,6 @@ type PartialUser = {
   firstname?: string;
   lastname?: string | null;
   profileImageURL?: string;
-  follower?: ({ id: string } | null)[] | null;
 };
 
 const UserAvatar = ({isFetched,user}: { isFetched: boolean, user: PartialUser}) => {
