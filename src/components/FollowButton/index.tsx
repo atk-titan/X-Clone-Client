@@ -31,9 +31,9 @@ const FollowButton = ({ id }: { id: string }) => {
   return (
     isFetched && id !== user?.id && (
         <>
-            { checkFollower ? (<button onClick={ handleUnfollow } className="px-3 py-2 border-t-3 border-l-3 border-white text-sm font-medium rounded-full bg-gray-300 text-gray-800 hover:cursor-pointer hover:shadow-xs shadow-gray-50 transition-all duration-400">
+            { checkFollower ? (<button onClick={ handleUnfollow } className="px-3 py-2 border-t-3 border-l-3 border-white text-sm font-bold tracking-wide rounded-full bg-gray-200 text-gray-800 hover:cursor-pointer hover:shadow-xs shadow-gray-50 transition-all duration-400">
                 Unfollow
-            </button>) : (<button onClick={ handleFollow } className="px-3 py-2 border-t-3 border-l-3 border-white text-sm font-medium rounded-full bg-gray-300 text-gray-800 hover:cursor-pointer hover:shadow-xs shadow-gray-50 transition-all duration-400">
+            </button>) : (<button onClick={ handleFollow } className="px-3 py-2 border-t-3 border-l-3 border-white text-sm font-bold tracking-wide rounded-full bg-gray-200 text-gray-800 hover:cursor-pointer hover:shadow-xs shadow-gray-50 transition-all duration-400">
                 Follow
             </button>) }
         </>)
