@@ -1,22 +1,32 @@
-import GoogleAuthButton from '../GoogleAuthButton';
+import GoogleAuthButton from "../GoogleAuthButton";
 
 const SinginContent = () => {
-    
-    return (
-        <div>
-            <h4 className='text-xl font-bold mb-2'>New to X?</h4>
-            <p className='text-gray-400 font-extralight text-sm mb-3'>Sign up now to get your own personalized timeline!</p>
-            <div className='w-full flex justify-center'>
-                <GoogleAuthButton/>
-            </div>
-            <p className='mt-3 text-sm text-gray-400 font-extralight'>By signing up, you agree to the 
-                <span className='mx-1 text-blue-400 hover:underline hover:cursor-pointer'>Terms of Service</span>
-                and 
-                <span className='mx-1 text-blue-400 hover:underline hover:cursor-pointer'>Privacy Policy</span>, including 
-                <span className='mx-1 text-blue-400 hover:underline hover:cursor-pointer'>Cookie Use</span>.
-            </p>
-        </div>
-    )
-}
+  return (
+    <div>
+      <h4 className="mb-2 text-xl font-bold">New to X?</h4>
+      <p className="mb-3 text-sm font-extralight text-gray-400">
+        Sign up now to get your own personalized timeline!
+      </p>
+      <div className="flex w-full justify-center">
+        <GoogleAuthButton />
+      </div>
+      <p className="mt-3 text-sm font-extralight text-gray-400">
+        By signing up, you agree to the
+        <span className="mx-1 text-blue-400 hover:cursor-pointer hover:underline">
+          Terms of Service
+        </span>
+        and
+        <span className="mx-1 text-blue-400 hover:cursor-pointer hover:underline">
+          Privacy Policy
+        </span>
+        , including
+        <span className="mx-1 text-blue-400 hover:cursor-pointer hover:underline">
+          Cookie Use
+        </span>
+        .
+      </p>
+    </div>
+  );
+};
 
 export default SinginContent;

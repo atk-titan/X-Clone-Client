@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useCurrentUser } from "@/hooks/user";
 import { Grok } from "@lobehub/icons";
 import Image from "next/image";
@@ -12,108 +12,119 @@ import { useCreateTweet } from "@/hooks/tweet";
 import { graphqlClient } from "@/clients/api";
 import { GetSignedUrlForTweetsDocument } from "@/gql/graphql";
 import { getSignedUrlForTweetsQuery } from "@/graphql/query/tweet";
-import axios from 'axios';
+import axios from "axios";
 import toast from "react-hot-toast";
 
 const InputCard = () => {
-    const [ imageURL, setImageURL ] = useState("");
-    const { mutation } = useCreateTweet();
-    const { isFetched, user } = useCurrentUser();
-    const [ tweetContent, setTweetContent ] = useState("");
+  const [imageURL, setImageURL] = useState("");
+  const { mutation } = useCreateTweet();
+  const { isFetched, user } = useCurrentUser();
+  const [tweetContent, setTweetContent] = useState("");
 
-    const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setTweetContent(e.target.value);
-    };
+  const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setTweetContent(e.target.value);
+  };
 
-    const postHandler = useCallback(() => {
-        mutation.mutate({
-          content: tweetContent,
-          imageURL: [imageURL]
+  const postHandler = useCallback(() => {
+    mutation.mutate({
+      content: tweetContent,
+      imageURL: [imageURL],
+    });
+    setTweetContent("");
+    setImageURL("");
+  }, [tweetContent, imageURL]);
+
+  const handleInputChange = useCallback((input: HTMLInputElement) => {
+    return async (event: Event) => {
+      event.preventDefault();
+      console.log(input.files);
+
+      const file: File | null | undefined = input.files?.item(0);
+      if (!file) return;
+
+      const { getSignedUrlForTweet } = await graphqlClient.request(
+        getSignedUrlForTweetsQuery,
+        {
+          imageType: file.type.split("/")[1],
+        },
+      );
+
+      if (getSignedUrlForTweet) {
+        toast.loading("loading...", { id: "media-upload" });
+        await axios.put(getSignedUrlForTweet, file, {
+          headers: {
+            "Content-Type": file.type,
+          },
         });
-        setTweetContent("");
-        setImageURL("")
-    },[tweetContent , imageURL]);
+        toast.success("upload completed", { id: "media-upload" });
 
-    const handleInputChange = useCallback((input:HTMLInputElement) => {
-      return async ( event: Event ) => {
-        event.preventDefault();
-        console.log(input.files);
+        const url = new URL(getSignedUrlForTweet);
+        const myFilePath = `${url.origin}${url.pathname}`;
 
-        const file: File | null | undefined = input.files?.item(0);
-        if(!file) return
-
-        const { getSignedUrlForTweet } = await graphqlClient.request(getSignedUrlForTweetsQuery,{
-          imageType: file.type.split("/")[1]
-        });
-
-        if(getSignedUrlForTweet){
-          toast.loading("loading...", { id: "media-upload" });
-          await axios.put(getSignedUrlForTweet,file,{
-            headers:{
-              "Content-Type": file.type
-            }
-          });
-          toast.success("upload completed", { id: "media-upload" });
-
-          const url = new URL(getSignedUrlForTweet);
-          const myFilePath = `${url.origin}${url.pathname}`;
-
-          setImageURL(myFilePath);
-        }
+        setImageURL(myFilePath);
       }
-    },[]);
+    };
+  }, []);
 
-    const handleSelectMedia = useCallback(() => {
-        const input = document.createElement("input");
-        input.setAttribute("type","file");
-        input.setAttribute("accept","image/*,video/*");
+  const handleSelectMedia = useCallback(() => {
+    const input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*,video/*");
 
-        const handlerFn = handleInputChange(input);
-        input.addEventListener("change", handlerFn);
+    const handlerFn = handleInputChange(input);
+    input.addEventListener("change", handlerFn);
 
-        input.click();
-    },[handleInputChange]);
-    
-    return (
-        <div>
-          <div className="grid grid-cols-12 w-full border-t border-gray-700 p-4 cursor-pointer">
-            <div className='col-span-1 flex items-center justify-center h-12 w-fit'>
-              <div className='rounded-full overflow-hidden w-fit h-fit'>
-                {isFetched && user?.profileImageURL && <Image src={user?.profileImageURL} height={45} width={45} alt='profile picture'/>}
-              </div>
+    input.click();
+  }, [handleInputChange]);
+
+  return (
+    <div>
+      <div className="grid w-full cursor-pointer grid-cols-12 border-t border-gray-700 p-4">
+        <div className="col-span-1 flex h-12 w-fit items-center justify-center">
+          <div className="h-fit w-fit overflow-hidden rounded-full">
+            {isFetched && user?.profileImageURL && (
+              <Image
+                src={user?.profileImageURL}
+                height={45}
+                width={45}
+                alt="profile picture"
+              />
+            )}
+          </div>
+        </div>
+        <div className="col-span-11 pl-2">
+          <textarea
+            value={tweetContent}
+            className="field-sizing-content h-auto min-h-[100px] w-full resize-none overflow-hidden border-b border-gray-700 px-1 py-2 text-xl focus:outline-0"
+            placeholder="What's happening?"
+            onChange={handleInput}
+          ></textarea>
+          {imageURL && (
+            <Image src={imageURL} alt="tweet-image" height={300} width={300} />
+          )}
+          <div className="flex items-center justify-between pt-3">
+            <div className="flex items-center gap-2 text-xl text-blue-400 sm:gap-3 md:gap-4">
+              <BiImage onClick={handleSelectMedia} />
+              <MdOutlineGifBox />
+              <Grok size={20} />
+              <BiPoll />
+              <BsEmojiSmileUpsideDown />
+              <GrSchedulePlay />
+              <IoLocationOutline />
             </div>
-            <div className="col-span-11 pl-2">
-              <textarea value={tweetContent} 
-                        className="w-full min-h-[100px] h-auto text-xl py-2 px-1 border-b border-gray-700 focus:outline-0 overflow-hidden resize-none field-sizing-content" 
-                        placeholder="What's happening?" 
-                        onChange={handleInput}>
-
-              </textarea>
-              {
-                imageURL && <Image src={imageURL} alt="tweet-image" height={300} width={300}/>
-              }
-              <div className="pt-3 flex justify-between items-center">
-                <div className="flex gap-2 sm:gap-3 md:gap-4 text-xl text-blue-400 items-center">
-                    <BiImage onClick={handleSelectMedia}/>
-                    <MdOutlineGifBox />
-                    <Grok size={20}/>
-                    <BiPoll />
-                    <BsEmojiSmileUpsideDown />
-                    <GrSchedulePlay />
-                    <IoLocationOutline />
-                </div>
-                <div>
-                    <button className="py-1.5 px-4 text-sm text-black font-semibold bg-gray-50 rounded-full hover:cursor-pointer hover:bg-gray-300 transition-all w-full h-full"
-                      onClick={postHandler}
-                    >
-                      Post
-                    </button>
-                </div>
-              </div>
+            <div>
+              <button
+                className="h-full w-full rounded-full bg-gray-50 px-4 py-1.5 text-sm font-semibold text-black transition-all hover:cursor-pointer hover:bg-gray-300"
+                onClick={postHandler}
+              >
+                Post
+              </button>
             </div>
           </div>
         </div>
-      );
-}
+      </div>
+    </div>
+  );
+};
 
 export default InputCard;
